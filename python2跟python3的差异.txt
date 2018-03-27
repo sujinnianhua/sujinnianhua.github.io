@@ -1,0 +1,9 @@
+python中引用HTMLTestrunner时报No module named StringIO
+因为python2跟python3 的差异引起的
+解决方法如下：
+首先在官网下HTMLTestRunner.py 文件，并加入到Lib这个就不多说了； 
+修改一：  在python shell里输入 >>>import HTMLTestRunner >>> dir(HTMLTestRunner)  发现不认识StringIO （No module named StringIO），确实3里面没有这个了，第94行引入的名称要改，改成import io，539行要改成self.outputBuffer = io.BytesIO()  
+ 修改二：  运行程序的时候有报错，AttributeError: 'dict' object has no attribute 'has_key' 发现has_key的又被K掉了，所有到642行去做修改，if not rmap.has_key(cls): 需要换成 if not cls in rmap: （修改的时候换行、空格等不要改掉原有的格式）  
+ 修改三：  运行，继续有报错：'str' object has no attribute 'decode'  唉，好像是3里面对字符的操作，decode已经拿掉了。定位一下，报在了772行，ue = e.decode('latin-1')，那么不需要decode操作了吧，直接改成 ue = e ，另外766还有类似的uo = o.decode('latin-1')，可不动先留着；   
+ 修改四：  继续运行，发现还是在纠结数据类型的错： output = saxutils.escape(uo+ue), TypeError: can't concat bytes to str   bytes和str不能直接连起来，那么778行的内容escape(uo+ue) 有一个处理的“笨办法”：都改成str，可修改该处内容为escape(str(uo)+ue)   
+ 修改五：（此处是最后一处改动了）  程序已然运行大半，但是最后还是有error：  print >>sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime)  TypeError: unsupported operand type(s) for >>: 'builtin_function_or_method' and 'RPCProxy'   相信这条很多刚接触3.x的人都明白， 2和3的print是很不同的，那么在3中，print 后面是不会跟>>这样的，所以到631行，把print的语句修改掉，原来是print >>sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime)，可改成 print (sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime))    每次修改后都要对HTMLTestRunner.py 保存一下。   另外在3当中，打开本地文件需用   fp = open(filename,'wb')，不要再去用file了；关闭该文件可用fp.close()   好啦，再试试你的程序吧

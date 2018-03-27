@@ -1,0 +1,9 @@
+1、官网下载：http://dl.eviware.com/list_soapui2.html?_ga=1.16http://dl.eviware.com/list_soapui2.html?_ga=1.162568764.18578086.14016161482568764.18578086.1401616148
+2、破解，下载破解文档
+3、先将C:\Program Files\SmartBear\SoapUI-Pro-5.1.2\lib＼Protection-4.6.jar　删除
+之后用破解文件中的Protection-4.6.jar　去替换
+4、启动soapui后点击弹窗的取消
+5、是否通过发送匿名信息来升级时选择否
+6、license时选择floating license 后点击ok
+7、选择有有效的许可证文件
+8、加入scr.key的路径

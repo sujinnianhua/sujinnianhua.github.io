@@ -1,0 +1,205 @@
+在网上找了好多都不行，最后还是这个好使。在网上搜索了半天挨个试过来最终找到了License server的方法，由此分享给大家。这个也完全没有使用时间的限制~
+
+直接打开pycharm，选License server激活，输入：http://idea.imsxm.com  或 http://idea.lanyus.com
+
+ 
+
+__int__()方法是一种特殊的方法，被称为类的构造函数或者是初始化方法，当创建了这个类的实例时就会调用该方法。
+
+
+self代表类的实例，self在定义类的方法时是必须有的，虽然在调用时不必传入相应的参数。
+
+
+类的方法与普通的函数只有一个特别的区别--它们必须有一个额外的第一个参数名称，按照惯例它的名称是self。
+
+
+在python中类的实例化类似函数调用方法。使用类的名称来实例化，并通__int__方法接受参数
+
+
+访问属性：使用(.)来访问对象的属性，使用类的名称访问类变量。
+
+python中继承的特点
+   1、在继承中基类的构造（__int__()方法）不会被自动调用，它需要在其派生类的构造中亲自专门调用
+   2、在调用基类的方法时，需要加上基类的类名前缀，且需要带上self参数变量。区别于在类中调用普通函数时并不需要带上self参数
+   3、python总是首先查找对应类型的方法，如果它不能在派生类中找到对应的方法，它才开始到基类中逐个查找。先在本类中查找调用的方法，找不到才去基类中找。
+
+
+
+类的私有属性：两个下划线开头，声明该属性为私有，不能在类的外部被使用或直接访问。在类内部的方法中使用时self.__private_attrs
+
+
+类的私有方法：两个下划线开头，声明该方法为私有方法，不能在类地外部调用。在类的内部调用self.__private_methods
+
+
+头尾双下划线定义的是特列方法，类似__init__()之类的。
+以单下划线开头的表示的是protected类型的变量，即保护类型只能允许其本身与子类进行访问，不能用于包的引入
+双下划线的表示的是私有类型的变量，只能允许这个类本身进行访问。
+
+
+在super机制里可以保证公共父类仅被执行一次：
+例子：class A:
+def __init__(self):
+print("Enter A")
+print("Leave A")
+
+class B(A):
+def __init__(self):
+print("Enter B")
+super(B, self).__init__()
+print("Leave B")
+
+class C(A):
+def __init__(self):
+print("Enter C")
+super(C, self).__init__()
+print("Leave C")
+
+class D(A):
+def __init__(self):
+print("Enter D")
+super(D, self).__init__()
+print("Leave D")
+
+class E(B, C, D):
+def __init__(self):
+print("Enter E")
+super(E, self).__init__()
+print("Leave E")
+
+E()
+
+结果：
+
+Enter E
+Enter B
+Enter C
+Enter D
+Enter A
+Leave A
+Leave D
+Leave C
+Leave B
+Leave E
+
+
+
+type()不会认为子类是一种父类类型。
+isinstance()会认为子类是一种父类类型。
+
+
+在Class中定义函数的时候如果没有加入self这个参数。那么就只能被Class对象自己访问了，因为这个instance对象访问会自动加入一个this。会导致程序出
+错。
+
+
+和普通的函数相比，在类中定义的函数只有一点不同，就是第一个参数永远是实例变量self，并且，调用时，不用传递该参数。除此之外，类的方法和普通函数没有什么区别，所以，你仍然可以用默认参数、可变参数、关键字参数和命名关键字参数。
+
+在python2中，如果定义类时继承了object，那么实例化后对象的type就是该类
+但如果定义类的时候没有继承object，实例化后对象的type将会是 instance
+
+class Person:  
+    def __init__(self,_obj):  
+        self.name = _obj['name']  
+        self.age = _obj['age'] 
+
+class Person:  
+    def __init__(self,_obj):  
+        self.__dict__.update(_obj)  
+
+
+
+关键字参数要对得上，可用字典当关键字参数入值，字典前加**即可
+hash = {'name':'hoho','age':18}
+'my name is {name},age is {age}'.format(**hash)
+
+
+python类内部调用自己的方法必须加self 
+class tt:
+    def fa(self):
+        return 'aa'
+    def fb(self):
+        return self.fa()
+上面代码中的self.fa()调用如果不加self，直接fa()调用会报错找不到fa定义，用惯了c#等语言的要注意这一点
+
+
+未绑定的类方法：没有self
+    通过类来引用方法返回一个未绑定方法对象。要调用它，你必须显示地提供一个实例作为第一个参数。
+
+绑定的实例方法：有self
+    通过实例访问方法返回一个绑定的方法对象。Python自动地给方法绑定一个实例，所以我们调用它时不用再传一个实例参数。
+
+两种方法都是对象，它们可以被传递、存入列表等待。两者运行时都需要一个实例作为第一参数（妤一个self值），但当通过一个实例调用一个绑定方法时Python自动会提供一个
+
+类是一个模板，在创建类的实例的时候，将必须绑定的属性强制写进去，这里会用大__init__方法。__init__方法的第一实例永远是self，self表示的创建的类实例本身。有了__init__方法后，创建实例的时候必须传入与__init__方法想匹配的参数。
+
+和普通函数相比，在类中定义函数只有一点不同，就是第一参数永远是类的本身实例self，并且调用时不用传递该参数，除此之外，类的函数和普通函数没啥区别，可以用默认参数、可变参数或者关键字参数（*args是可变参数，args接收的是一个tuple，**kw是关键字参数，kw接收的是一个dict）。
+
+如果要让内部属性不被外部访问，可以把属性的名称前加上两个下划线，在Python中，实例的变量名如果以开头，就变成了一个私有变量（private），只有内部可以访问，外部不能访问。
+
+需要注意的是，在Python中，变量名类似__xxx__的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的，不是private变量，所以，不能用__name__、__score__这样的变量名。
+
+
+
+
+
+类中的构造方法init
+1、初始化对象的状态，使得对象被创建后可以立即调用
+2、在构造方法中初始化属性后，实例化对象后就可以直接被调用
+3、在子类中用构造方法初始化父类后，父类中的属性和函数可以被调用
+第一种方法是，在子类的构造方法中Bird.__init__(self)。原理：在调用了一个实例的方法时，该方法的self参数会自动绑定到实例上（称为绑定方法）；如果直接调用类的方法（比如Bird.__init__），那么就没有实例会被绑定，可以自由提供需要的self参数（未绑定方法）
+第二种方法是，在子类的构造方法中super(SongBird,self).__init__()。它会查找所有的超类，以及超类的超类，直到找到所需的特性（即属性和方法）为止。
+
+
+
+python中的异常处理：
+1、try...expect,防止程序出现错误或者异常的时候程序终止了
+2、try...expect....else,当没有异常发生时，else中的语句将会被执行（有异常发生时，else中的语句不会被执行）
+3、raise引发一个异常（一般是数据引起的异常）
+4、try....finally,无论异常发生与否，在程序结束钱，finally中的语句都会被执行
+
+
+
+在类里主要有三种方法：
+
+a、普通方法：在普通方法定义的时候，需要一个对象的实例参数，从而在类中定义普通方法的时候，都必须传送一个参数self，那么这个参数也就是object
+
+b、类方法：在类方法中，传递的参数为类也就是class，在一般使用中参数为cls
+
+c、静态方法：无需任何参数，在静态方法中，仅仅是一个函数，在调用静态方法的时候，不需要传递任何参数即可使用
+
+
+在类的三种方法中，普通方法和类方法都是绑定的方法，也就是在其中需要传递参数，普通方法传递为slef，类方法传递的为cls
+
+
+
+在使用的时候，静态方法仅仅是逻辑上和class绑定在一起的，而类方法可以做动态的匹配，传递进去的是clas，也就是类
+
+
+
+在语法上，静态方法需要使用装饰符@staticmethod,而类方法需要使用装饰符@classmethod
+
+也就是在init方法中，必须返回值为None
+
+
+
+
+python在安装时，默认的编码是ascii，当程序中出现非ascii编码时，python的处理常常会报这样的错UnicodeDecodeError: 'ascii' codec can't decode byte 0x?? in position 1: ordinal not in range(128)，python没办法处理非ascii编码的，此时需要自己设置将python的默认编码，一般设置为utf8的编码格式。
+一个解决的方案在程序中加入以下代码：
+Python代码    
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf8')   
+ 另一个方案是在python的Lib\site-packages文件夹下新建一个sitecustomize.py，内容为：
+Python代码    
+# encoding=utf8  
+import sys  
+  
+reload(sys)  
+sys.setdefaultencoding('utf8')   
+
+
+
+
+代码中有中文注释的时候会报错：解决方案为在第一行或者第二行加上#__ coding:utf-8 __
+
+
+__repr__和__str__这两个方法都是用于显示的，__str__是面向用户的，而__repr__面向程序员。
